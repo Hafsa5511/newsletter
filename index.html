@@ -22,7 +22,7 @@
         background: rgba(255, 215, 0, 0.9);
         border-radius: 50%;
         pointer-events: none;
-        z-index: 10000;
+        z-index: 100000;
         transition: transform 0.15s ease-out, opacity 0.15s ease-out;
         box-shadow: 0 0 15px rgba(255, 215, 0, 0.6),
           0 0 25px rgba(255, 215, 0, 0.3);
@@ -36,7 +36,7 @@
         border: 1px solid rgba(255, 215, 0, 0.4);
         border-radius: 50%;
         pointer-events: none;
-        z-index: 9999;
+        z-index: 99999;
         transition: all 0.2s ease-out;
         box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
       }
@@ -49,7 +49,7 @@
         background: rgba(255, 215, 0, 0.8);
         border-radius: 50%;
         pointer-events: none;
-        z-index: 9998;
+        z-index: 99997;
         animation: sparkle-fade 0.8s ease-out forwards;
         box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
       }
@@ -268,6 +268,82 @@
   opacity: 0;
   transition: bottom 0.1s ease-out, opacity 0.3s ease-out;
 }
+      
+      /* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 169, 88, 0.3);
+  box-shadow: 0 0 50px rgba(255, 169, 88, 0.3);
+  animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 30px;
+  right: 50px;
+  font-size: 50px;
+  color: rgba(255, 169, 88, 1);
+  transition: transform 0.3s, color 0.3s;
+  font-weight: 300;
+}
+
+.modal-close:hover {
+  transform: rotate(90deg);
+  color: rgba(255, 215, 0, 1);
+}
+
+.grid-image {
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.grid-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 30px rgba(255, 169, 88, 0.3);
+}
+      
     </style>
   </head>
 
@@ -600,7 +676,47 @@ Target Audience: Young adult and adult readers who want to stay motivated, track
   
   updateProgress();
 </script>
-  
-  
+    
+     <!-- Image Modal -->
+<div class="modal" id="imageModal">
+  <span class="modal-close">&times;</span>
+  <img class="modal-content" id="modalImage">
+</div>
+  <script>
+  // Image modal functionality
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
+  const modalClose = document.querySelector('.modal-close');
+  const gridImages = document.querySelectorAll('.grid-image');
+
+  gridImages.forEach(img => {
+    img.addEventListener('click', function() {
+      modal.classList.add('active');
+      modalImg.src = this.src;
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+
+  modalClose.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+</script>
+ 
+    </div>
   </body>
 </html>
